@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">WeatherKODE</string>
+
+    <string name="error_network_connection_title">No internet</string>
+    <string name="error_network_connection">Try refreshing the screen when
+        communication is restored.</string>
+
+    <string name="error_base_title">Something went wrong</string>
+    <string name="error_base">The problem is on our side, we are already looking into it.
+        Please try refreshing the screen later.</string>
+
+    <string name="error_missing_content_title">Content is missing</string>
+    <string name="error_missing_content">The requested content is missing. Please try again later.</string>
+
+    <string name="refresh">Refresh</string>
+</resources>

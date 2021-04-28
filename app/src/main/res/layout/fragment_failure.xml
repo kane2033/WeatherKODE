@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.kode.weather.presentation.base.exception.FailureViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.base.FailureFragment">
+
+        <TextView
+            android:id="@+id/failureTitleView"
+            style="@style/failure_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/def_margin"
+            android:gravity="center"
+            android:text="@{viewModel.failureInfo.title}"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/failureTextView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="No internet" />
+
+        <TextView
+            android:id="@+id/failureTextView"
+            style="@style/failure_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/def_margin"
+            android:gravity="center"
+            android:lineSpacingExtra="5sp"
+            android:text="@{viewModel.failureInfo.text}"
+            app:layout_constraintBottom_toTopOf="@+id/retryButton"
+            app:layout_constraintEnd_toEndOf="@id/failureTitleView"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@id/failureTitleView"
+            app:layout_constraintTop_toBottomOf="@+id/failureTitleView"
+            tools:text="Try refreshing the screen when communication is restored." />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/retryButton"
+            style="@style/retry_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/def_margin"
+            android:minHeight="60dp"
+            android:text="@{viewModel.failureInfo.buttonText ?? @string/refresh}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/failureTextView"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@id/failureTextView"
+            app:layout_constraintTop_toBottomOf="@+id/failureTextView"
+            tools:text="Refresh" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="bottom_sheet_item" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:background">@drawable/abc_btn_borderless_material</item>
+        <item name="android:layout_marginHorizontal">20dp</item>
+        <item name="android:layout_marginVertical">30dp</item>
+        <item name="android:drawablePadding">34dp</item>
+        <item name="android:gravity">center_vertical|start</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="failure_title" parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="android:gravity">center</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="failure_text" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:gravity">center</item>
+        <item name="android:lineSpacingExtra">5sp</item>
+    </style>
+
+    <style name="retry_button" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:textColor">@color/blue</item>
+        <item name="android:lineSpacingExtra">8sp</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="strokeColor">@color/blue</item>
+    </style>
+</resources>
