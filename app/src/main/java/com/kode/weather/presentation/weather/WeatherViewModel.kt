@@ -11,9 +11,7 @@ import com.kode.weather.presentation.base.BaseViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-class WeatherViewModel() : BaseViewModel() {
-
-    private val fetchWeatherInfo = FetchWeatherInfo(WeatherMockDataSource())
+class WeatherViewModel(private val fetchWeatherInfo: FetchWeatherInfo) : BaseViewModel() {
 
     private val _weatherInfo = MutableLiveData<WeatherInfo>()
     val weatherInfo: LiveData<WeatherInfo> = _weatherInfo

@@ -7,6 +7,7 @@ import androidx.fragment.app.viewModels
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.kode.weather.R
 import com.kode.weather.databinding.FragmentFailureBinding
+import org.koin.androidx.viewmodel.ext.android.stateViewModel
 
 /**
  * Диалоговый фрагмент, ответственный за отображение информации об ошибке
@@ -14,7 +15,7 @@ import com.kode.weather.databinding.FragmentFailureBinding
  * */
 class FailureFragment : DialogFragment(R.layout.fragment_failure) {
 
-    private val viewModel: FailureViewModel by viewModels()
+    private val viewModel: FailureViewModel by stateViewModel()
 
     private val binding: FragmentFailureBinding by viewBinding(FragmentFailureBinding::bind)
 
