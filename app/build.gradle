@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'kotlin-parcelize'
+    id 'com.google.secrets_gradle_plugin' version '0.6'
 }
 
 android {
@@ -60,6 +61,9 @@ dependencies {
     implementation 'io.insert-koin:koin-core:3.0.1'
     implementation 'io.insert-koin:koin-android:3.0.1'
     implementation 'io.insert-koin:koin-android-ext:3.0.1'
+    implementation 'com.google.android.gms:play-services-maps:17.0.1'
+    implementation 'com.google.android.gms:play-services-location:18.0.0'
+    implementation 'com.google.maps.android:maps-ktx:2.3.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'

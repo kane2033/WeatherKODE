@@ -10,8 +10,10 @@
         android:name="com.kode.weather.presentation.weather.MapFragment"
         tools:layout="@layout/fragment_map"
         android:label="MapFragment" />
+
     <dialog
         android:id="@+id/failureFragment"
         android:name="com.kode.weather.presentation.base.exception.FailureFragment"
+        tools:layout="@layout/fragment_failure"
         android:label="FailureFragment" />
 </navigation>
