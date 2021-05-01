@@ -1,4 +1,4 @@
-package com.kode.weather.presentation.weather.extention
+package com.kode.weather.presentation.map.extention
 
 import android.content.Context
 import android.content.pm.PackageManager

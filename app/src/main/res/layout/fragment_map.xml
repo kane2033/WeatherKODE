@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="com.kode.weather.presentation.weather.WeatherViewModel" />
+            type="com.kode.weather.presentation.map.MapViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"

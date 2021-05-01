@@ -1,13 +1,26 @@
 package com.kode.weather.domain.base.usecase
 
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 
 abstract class UseCase<out Type, in Param> where Type : Any {
 
-    abstract fun run(param: Param): Flow<Result<Type>>
+    // В переопределении run нужно только вернуть Type
+    abstract fun run(param: Param): Type
 
+    // "invoke" упакует результат run в flow и result
     operator fun invoke(param: Param): Flow<Result<Type>> {
-        return run(param).flowOn(Dispatchers.IO) // Выполняем работу в IO
+        val flow = flow {
+            val result = try {
+                Result.success(run(param))
+            } catch (e: Throwable) {
+                Result.failure(e)
+            }
+            emit(result)
+        }
+        return flow.flowOn(Dispatchers.IO)
     }
+
 }
