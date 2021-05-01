@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
-abstract class UseCase<out Type, in Param> where Type : Any {
+abstract class UseCase<out Type, in Param> {
 
     // В переопределении run нужно только вернуть Type
     abstract fun run(param: Param): Type

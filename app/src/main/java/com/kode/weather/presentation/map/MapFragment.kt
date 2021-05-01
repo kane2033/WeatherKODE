@@ -18,13 +18,14 @@ import com.kode.weather.presentation.map.entity.SingleCircleMarker
 import com.kode.weather.presentation.map.extention.checkPermission
 import com.kode.weather.presentation.map.extention.permissionActivityResultContract
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.util.*
 
 class MapFragment : BaseFragment(R.layout.fragment_map) {
 
     companion object {
         private const val LOCATION_PERMISSION = Manifest.permission.ACCESS_COARSE_LOCATION
-        private const val ZOOM_DEFAULT = 8F
-        private const val RADIUS_DEFAULT = 50000.0 // 50 КМ
+        private const val ZOOM_DEFAULT = 11F
+        private const val RADIUS_DEFAULT = 2000.0 // 5 КМ
     }
 
     override val viewModel: MapViewModel by viewModel()
@@ -47,11 +48,13 @@ class MapFragment : BaseFragment(R.layout.fragment_map) {
         viewModel.lastLocation.observe(viewLifecycleOwner, { event ->
             event.getContentIfNotHandled()?.let {
                 getMapFragment().getMapAsync { googleMap ->
+                    // Запрашиваем название города, в котором находится юзер
+                    viewModel.fetchCityNameByCoordinates(it.latitude, it.longitude)
+
+                    // Отображение местоположения юзера маркером и перемещением камеры
                     val lastLocationCoordinates = LatLng(it.latitude, it.longitude)
-
                     mapMarker.createCircleMarker(googleMap, lastLocationCoordinates)
-
-                    googleMap.animateCamera(
+                    googleMap.moveCamera(
                         CameraUpdateFactory.newLatLngZoom(lastLocationCoordinates, ZOOM_DEFAULT)
                     )
                 }
@@ -93,15 +96,36 @@ class MapFragment : BaseFragment(R.layout.fragment_map) {
             requestLocationPermission.launch(LOCATION_PERMISSION)
         }
 
+        val mapFragment = getMapFragment()
+
         // При клике на любую точку карты
-        getMapFragment().getMapAsync { googleMap ->
+        mapFragment.getMapAsync { googleMap ->
             googleMap.setOnMapClickListener { coordinates ->
-                // Создается маркер на кликнутой точке
-                mapMarker.createCircleMarker(googleMap, coordinates)
-                // Камера перемещается на эту точку
-                val cameraPosition = CameraUpdateFactory.newLatLngZoom(coordinates, ZOOM_DEFAULT)
-                googleMap.animateCamera(cameraPosition)
+                viewModel.setCityCoordinates(coordinates.latitude, coordinates.longitude)
             }
         }
+
+        viewModel.cityCoordinates.observe(viewLifecycleOwner, {
+            mapFragment.getMapAsync { googleMap ->
+                val coordinates = LatLng(it.latitude, it.longitude)
+                mapMarker.createCircleMarker(googleMap, coordinates)
+                // Не увеличиваем зум, если текущий выше дефолтного
+                val cameraPosition = if (googleMap.cameraPosition.zoom > ZOOM_DEFAULT) {
+                    CameraUpdateFactory.newLatLng(coordinates)
+                } else {
+                    CameraUpdateFactory.newLatLngZoom(coordinates, ZOOM_DEFAULT)
+                }
+                // Камера перемещается на созданную точку
+                googleMap.animateCamera(cameraPosition)
+            }
+        })
+
+        viewModel.cityName.observe(viewLifecycleOwner, {
+            makeToast("Clicked city: $it")
+        })
+
+        viewModel.cityDialogVisibility.observe(viewLifecycleOwner, { isVisible ->
+            if (!isVisible) makeToast("City not found!")
+        })
     }
 }

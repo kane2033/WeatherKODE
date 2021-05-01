@@ -35,5 +35,9 @@ abstract class BaseViewModel : ViewModel() {
         }
     }
 
+    // Создание LiveData из MutableLiveData,
+    // чтобы скрыть MutableLiveData от view
+    fun <T> MutableLiveData<T>.asLiveData() = this as LiveData<T>
+
     protected fun <T> Flow<T>.catchFailure() = catch { e -> if (e is Failure) handleFailure(e) }
 }
