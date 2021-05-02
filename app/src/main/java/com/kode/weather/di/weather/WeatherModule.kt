@@ -1,7 +1,7 @@
 package com.kode.weather.di.weather
 
-import com.kode.weather.data.weather.datasource.GeoCoderDataSourceImpl
-import com.kode.weather.data.weather.datasource.LastLocationDataSourceImpl
+import com.kode.weather.data.weather.datasource.location.GeoCoderDataSourceImpl
+import com.kode.weather.data.weather.datasource.location.LastLocationDataSourceImpl
 import com.kode.weather.domain.weather.datasource.GeoCoderDataSource
 import com.kode.weather.domain.weather.datasource.LastLocationDataSource
 import com.kode.weather.domain.weather.usecase.FetchCityNameByCoordinates

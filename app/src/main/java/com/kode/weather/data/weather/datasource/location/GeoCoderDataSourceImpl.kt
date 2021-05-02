@@ -1,4 +1,4 @@
-package com.kode.weather.data.weather.datasource
+package com.kode.weather.data.weather.datasource.location
 
 import android.content.Context
 import android.location.Geocoder
