@@ -18,19 +18,33 @@ class MapViewModel(
     private val _lastLocation = MutableLiveData<Event<LocationCoordinates>>()
     val lastLocation = _lastLocation.asLiveData()
 
+    // Отображаемое название города
     private val _cityName = MutableLiveData<String>()
     val cityName = _cityName.asLiveData()
 
+    // Фрагмент наблюдает за выбранным названием,
+    // при изменении открывается след. фрагмент
+    private val _selectedCityName = MutableLiveData<Event<String>>()
+    val selectedCityName = _selectedCityName.asLiveData()
+
     private val _cityCoordinates = MutableLiveData<LocationCoordinates>()
     val cityCoordinates = _cityCoordinates.asLiveData()
+
+    private val _cityDialogVisibility = MutableLiveData(false)
+    val cityDialogVisibility = _cityDialogVisibility.asLiveData()
 
     fun setCityCoordinates(latitude: Double, longitude: Double) {
         _cityCoordinates.value = LocationCoordinates(latitude, longitude)
         fetchCityNameByCoordinates(latitude, longitude)
     }
 
-    private val _cityDialogVisibility = MutableLiveData<Boolean>()
-    val cityDialogVisibility = _cityDialogVisibility.asLiveData()
+    fun showWeatherClick() {
+        cityName.value?.let { _selectedCityName.value = Event(it) }
+    }
+
+    fun closeDialogClick() {
+        _cityDialogVisibility.value = false
+    }
 
     fun fetchUserLastLocation() {
         viewModelScope.launch {

@@ -120,12 +120,11 @@ class MapFragment : BaseFragment(R.layout.fragment_map) {
             }
         })
 
-        viewModel.cityName.observe(viewLifecycleOwner, {
-            makeToast("Clicked city: $it")
-        })
-
-        viewModel.cityDialogVisibility.observe(viewLifecycleOwner, { isVisible ->
-            if (!isVisible) makeToast("City not found!")
+        viewModel.selectedCityName.observe(viewLifecycleOwner, { event ->
+            event.getContentIfNotHandled()?.let { name ->
+                makeToast("Navigation will happen!")
+                //navigateTo()
+            }
         })
     }
 }

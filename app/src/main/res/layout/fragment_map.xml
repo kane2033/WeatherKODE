@@ -4,6 +4,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="viewModel"
             type="com.kode.weather.presentation.map.MapViewModel" />
@@ -15,14 +17,29 @@
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/map"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:context=".presentation.weather.GoogleMapsFragment" />
+
+        <include
+            android:id="@+id/cityInfoView"
+            layout="@layout/layout_city_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/def_margin"
+            android:visibility="@{viewModel.cityDialogVisibility ? View.VISIBLE : View.GONE}"
+            app:coordinates="@{viewModel.cityCoordinates.degrees}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:name="@{viewModel.cityName}"
+            app:onCloseClick="@{()-> viewModel.closeDialogClick()}"
+            app:onShowWeatherClick="@{()-> viewModel.showWeatherClick()}" />
 
         <androidx.core.widget.ContentLoadingProgressBar
             android:id="@+id/progress_bar"

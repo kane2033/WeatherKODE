@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">WeatherKODE</string>
 
+    <string name="show_weather">Show weather</string>
+    <string name="close">Close</string>
+
     <string name="error_network_connection_title">No internet</string>
     <string name="error_network_connection">Try refreshing the screen when
         communication is restored.</string>
