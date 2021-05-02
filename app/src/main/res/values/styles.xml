@@ -11,6 +11,23 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
 
+    <style name="oval_image">
+        <item name="cornerSizeTopLeft">50%</item>
+        <item name="cornerSizeBottomLeft">15%</item>
+    </style>
+
+    <style name="weather_title_text" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textSize">@dimen/weather_text_size</item>
+        <item name="android:layout_marginTop">40dp</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="weather_text" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textSize">@dimen/weather_text_size</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <style name="failure_title" parent="TextAppearance.MaterialComponents.Headline5">
         <item name="android:gravity">center</item>
         <item name="android:textStyle">bold</item>

@@ -8,12 +8,27 @@
     <fragment
         android:id="@+id/mapFragment"
         android:name="com.kode.weather.presentation.map.MapFragment"
-        tools:layout="@layout/fragment_map"
-        android:label="MapFragment" />
+        android:label="@string/map_fragment_title"
+        tools:layout="@layout/fragment_map">
+        <action
+            android:id="@+id/action_mapFragment_to_weatherFragment"
+            app:destination="@id/weatherFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/weatherFragment"
+        android:name="com.kode.weather.presentation.weather.WeatherFragment"
+        android:label="{cityName}"
+        tools:layout="@layout/fragment_weather">
+        <argument
+            android:name="cityName"
+            app:argType="string" />
+    </fragment>
 
     <dialog
         android:id="@+id/failureFragment"
         android:name="com.kode.weather.presentation.base.exception.FailureFragment"
-        tools:layout="@layout/fragment_failure"
-        android:label="FailureFragment" />
+        android:label="FailureFragment"
+        tools:layout="@layout/fragment_failure" />
+
 </navigation>

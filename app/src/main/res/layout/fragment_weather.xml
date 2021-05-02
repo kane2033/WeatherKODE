@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingStart="@dimen/def_margin"
+        android:paddingEnd="0dp">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/weatherEndImageView"
+            android:layout_width="wrap_content"
+            app:shapeAppearanceOverlay="@style/oval_image"
+            android:layout_height="0dp"
+            android:layout_marginTop="24dp"
+            android:contentDescription="@string/weather_image"
+            android:scaleType="centerCrop"
+            android:src="@drawable/weather_scattered_clouds"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/weather_scattered_clouds" />
+
+        <TextView
+            android:id="@+id/temperatureView"
+            style="@style/TextAppearance.MaterialComponents.Headline6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:textSize="120sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="23" />
+
+        <TextView
+            android:id="@+id/temperatureUnitView"
+            style="@style/TextAppearance.MaterialComponents.Headline5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:text="@string/celsius"
+            android:textSize="40sp"
+            app:layout_constraintBottom_toBottomOf="@+id/temperatureView"
+            app:layout_constraintStart_toEndOf="@id/temperatureView"
+            app:layout_constraintTop_toTopOf="@id/temperatureView"
+            app:layout_constraintVertical_bias="0.25" />
+
+        <ImageView
+            android:id="@+id/weatherIconImageView"
+            android:layout_width="84dp"
+            android:layout_height="66dp"
+            android:contentDescription="@string/weather_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/temperatureView"
+            tools:src="@drawable/ic_close" />
+
+        <TextView
+            android:id="@+id/weatherDescriptionView"
+            style="@style/TextAppearance.MaterialComponents.Body1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:textSize="@dimen/weather_text_size"
+            app:layout_constraintEnd_toEndOf="@id/weatherIconImageView"
+            app:layout_constraintStart_toStartOf="@id/weatherIconImageView"
+            app:layout_constraintTop_toBottomOf="@id/weatherIconImageView"
+            tools:text="Scattered Clouds" />
+
+        <TextView
+            android:id="@+id/humidityTitleView"
+            style="@style/weather_title_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/humidity"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/weatherDescriptionView" />
+
+        <TextView
+            android:id="@+id/humidityView"
+            style="@style/weather_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/humidityTitleView"
+            tools:text="58%" />
+
+        <TextView
+            android:id="@+id/windTitleView"
+            style="@style/weather_title_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/wind"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/humidityView" />
+
+        <TextView
+            android:id="@+id/windView"
+            style="@style/weather_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/windTitleView"
+            tools:text="N 3 m/s" />
+
+        <TextView
+            android:id="@+id/pressureTitleView"
+            style="@style/weather_title_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pressure"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/windView" />
+
+        <TextView
+            android:id="@+id/pressureView"
+            style="@style/weather_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/def_margin"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/pressureTitleView"
+            tools:text="763.53 mm Hg" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -7,6 +7,7 @@ import com.kode.weather.domain.weather.datasource.LastLocationDataSource
 import com.kode.weather.domain.weather.usecase.FetchCityNameByCoordinates
 import com.kode.weather.domain.weather.usecase.FetchUserLastLocation
 import com.kode.weather.presentation.map.MapViewModel
+import com.kode.weather.presentation.weather.WeatherViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -20,5 +21,7 @@ object WeatherModule {
         single { FetchCityNameByCoordinates(get()) }
 
         viewModel { MapViewModel(get(), get()) }
+
+        viewModel { parameters -> WeatherViewModel(cityName = parameters.get()) }
     }
 }

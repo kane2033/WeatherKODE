@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.SupportMapFragment
@@ -39,32 +40,9 @@ class MapFragment : BaseFragment(R.layout.fragment_map) {
     // Единичный маркер с радиусом на гугл карте
     private lateinit var mapMarker: SingleCircleMarker
 
-    // Перед выполнением функции проверяется пермишн
-    private val onLocationGranted = {
-        // Запрашиваем местоположение юзера
-        viewModel.fetchUserLastLocation()
-
-        // Зум на локацию юзера по получению локации
-        viewModel.lastLocation.observe(viewLifecycleOwner, { event ->
-            event.getContentIfNotHandled()?.let {
-                getMapFragment().getMapAsync { googleMap ->
-                    // Запрашиваем название города, в котором находится юзер
-                    viewModel.fetchCityNameByCoordinates(it.latitude, it.longitude)
-
-                    // Отображение местоположения юзера маркером и перемещением камеры
-                    val lastLocationCoordinates = LatLng(it.latitude, it.longitude)
-                    mapMarker.createCircleMarker(googleMap, lastLocationCoordinates)
-                    googleMap.moveCamera(
-                        CameraUpdateFactory.newLatLngZoom(lastLocationCoordinates, ZOOM_DEFAULT)
-                    )
-                }
-            }
-        })
-    }
-
     // Запрос пермишна на локацию через Activity Result API
     private val requestLocationPermission = permissionActivityResultContract(
-        onGranted = onLocationGranted,
+        onGranted = { viewModel.fetchUserLastLocation() },
         onRejected = { makeToast(R.string.error_permission_location) }
     )
 
@@ -91,7 +69,7 @@ class MapFragment : BaseFragment(R.layout.fragment_map) {
 
         // Работа с картой будет выполнена только если есть пермишн на локацию
         if (requireContext().checkPermission(LOCATION_PERMISSION)) {
-            onLocationGranted()
+            viewModel.fetchUserLastLocation()
         } else {
             requestLocationPermission.launch(LOCATION_PERMISSION)
         }
@@ -121,9 +99,9 @@ class MapFragment : BaseFragment(R.layout.fragment_map) {
         })
 
         viewModel.selectedCityName.observe(viewLifecycleOwner, { event ->
-            event.getContentIfNotHandled()?.let { name ->
-                makeToast("Navigation will happen!")
-                //navigateTo()
+            event.getContentIfNotHandled()?.let { cityName ->
+                val action = MapFragmentDirections.actionMapFragmentToWeatherFragment(cityName)
+                findNavController().navigate(action)
             }
         })
     }

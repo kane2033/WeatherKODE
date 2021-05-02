@@ -39,7 +39,7 @@ class MapViewModel(
     }
 
     fun showWeatherClick() {
-        cityName.value?.let { _selectedCityName.value = Event(it) }
+        _cityName.value?.let { _selectedCityName.value = Event(it) }
     }
 
     fun closeDialogClick() {
@@ -50,13 +50,13 @@ class MapViewModel(
         viewModelScope.launch {
             val result = fetchUserLastLocation(Unit).loadingIndication().single()
             result.fold(
-                onSuccess = { _lastLocation.value = Event(it) },
+                onSuccess = { setCityCoordinates(it.latitude, it.longitude) },
                 onFailure = { handleFailure(it) }
             )
         }
     }
 
-    fun fetchCityNameByCoordinates(latitude: Double, longitude: Double) {
+    private fun fetchCityNameByCoordinates(latitude: Double, longitude: Double) {
         viewModelScope.launch {
             val cityCoordinates = LocationCoordinates(latitude, longitude)
             fetchCityName(cityCoordinates)
