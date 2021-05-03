@@ -2,9 +2,12 @@ package com.kode.weather.di.weather
 
 import com.kode.weather.data.weather.datasource.location.GeoCoderDataSourceImpl
 import com.kode.weather.data.weather.datasource.location.LastLocationDataSourceImpl
+import com.kode.weather.data.weather.datasource.network.WeatherDataSourceImpl
 import com.kode.weather.domain.weather.datasource.GeoCoderDataSource
 import com.kode.weather.domain.weather.datasource.LastLocationDataSource
+import com.kode.weather.domain.weather.datasource.WeatherDataSource
 import com.kode.weather.domain.weather.usecase.FetchCityNameByCoordinates
+import com.kode.weather.domain.weather.usecase.FetchCityWeather
 import com.kode.weather.domain.weather.usecase.FetchUserLastLocation
 import com.kode.weather.presentation.map.MapViewModel
 import com.kode.weather.presentation.weather.WeatherViewModel
@@ -22,6 +25,9 @@ object WeatherModule {
 
         viewModel { MapViewModel(get(), get()) }
 
-        viewModel { parameters -> WeatherViewModel(cityName = parameters.get()) }
+        single<WeatherDataSource> { WeatherDataSourceImpl(get(), get()) }
+        single { FetchCityWeather(get()) }
+
+        viewModel { WeatherViewModel(get(), get()) }
     }
 }

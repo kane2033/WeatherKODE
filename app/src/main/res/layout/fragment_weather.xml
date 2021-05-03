@@ -3,6 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.kode.weather.presentation.weather.WeatherViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -12,7 +19,6 @@
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/weatherEndImageView"
             android:layout_width="wrap_content"
-            app:shapeAppearanceOverlay="@style/oval_image"
             android:layout_height="0dp"
             android:layout_marginTop="24dp"
             android:contentDescription="@string/weather_image"
@@ -21,6 +27,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/oval_image"
             tools:src="@drawable/weather_scattered_clouds" />
 
         <TextView
@@ -29,6 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
+            android:text="@{String.valueOf(viewModel.weather.temperature)}"
             android:textSize="120sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -54,7 +62,7 @@
             android:contentDescription="@string/weather_icon"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/temperatureView"
-            tools:src="@drawable/ic_close" />
+            tools:src="@drawable/ic_launcher_foreground" />
 
         <TextView
             android:id="@+id/weatherDescriptionView"
@@ -63,6 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:gravity="center"
+            android:text="@{viewModel.weather.description}"
             android:textSize="@dimen/weather_text_size"
             app:layout_constraintEnd_toEndOf="@id/weatherIconImageView"
             app:layout_constraintStart_toStartOf="@id/weatherIconImageView"
@@ -84,6 +93,7 @@
             style="@style/weather_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@{@string/humidity_value(viewModel.weather.humidity)}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/humidityTitleView"
             tools:text="58%" />
@@ -102,9 +112,11 @@
             style="@style/weather_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text='@{@string/wind_value(viewModel.weather.windDirection.direction ?? "", viewModel.weather.windSpeed)}'
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/windTitleView"
             tools:text="N 3 m/s" />
+
 
         <TextView
             android:id="@+id/pressureTitleView"
@@ -121,9 +133,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/def_margin"
+            android:text="@{@string/pressure_value(viewModel.weather.pressure)}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/pressureTitleView"
             tools:text="763.53 mm Hg" />
+
+        <androidx.core.widget.ContentLoadingProgressBar
+            android:id="@+id/progress_bar"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:indeterminateTintMode="src_atop"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:loading="@{viewModel.isLoading}"
+            tools:visibility="visible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

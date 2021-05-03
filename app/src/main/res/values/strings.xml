@@ -9,9 +9,14 @@
     <string name="celsius">&#176;C</string>
     <string name="weather_icon">Weather icon</string>
     <string name="humidity">Humidity</string>
+    <string name="humidity_value">%1$d%%</string>
     <string name="wind">Wind</string>
+    <string name="wind_value">%1$s %2$.1f m/s</string>
     <string name="pressure">Pressure</string>
+    <string name="pressure_value">%1$d mm Hg</string>
     <string name="weather_image">Weather today</string>
+
+    <string name="error_city_not_found">Could not find forecast for this city.</string>
 
     <string name="error_network_connection_title">No internet</string>
     <string name="error_network_connection">Try refreshing the screen when

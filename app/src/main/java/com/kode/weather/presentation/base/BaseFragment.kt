@@ -41,7 +41,7 @@ abstract class BaseFragment(@LayoutRes layoutId: Int) : Fragment(layoutId) {
 
     protected fun handleFailure(
         handleFailure: (failure: Failure) -> Unit = { makeToast(R.string.error_base_title) },
-        handleRequestFailure: (failure: Failure) -> Unit = {}
+        handleRequestFailure: (failure: Failure.RequestFailure) -> Unit = {}
     ) {
         viewModel.failure.observe(viewLifecycleOwner, {
             it.getContentIfNotHandled()?.let { failure ->

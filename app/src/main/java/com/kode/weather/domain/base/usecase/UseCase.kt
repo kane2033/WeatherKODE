@@ -16,6 +16,7 @@ abstract class UseCase<out Type, in Param> {
             val result = try {
                 Result.success(run(param))
             } catch (e: Throwable) {
+                e.printStackTrace()
                 Result.failure(e)
             }
             emit(result)
