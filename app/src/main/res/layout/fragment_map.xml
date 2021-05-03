@@ -6,6 +6,8 @@
 
         <import type="android.view.View" />
 
+        <import type="android.view.Gravity" />
+
         <variable
             name="viewModel"
             type="com.kode.weather.presentation.map.MapViewModel" />
@@ -32,14 +34,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/def_margin"
-            android:visibility="@{viewModel.cityDialogVisibility ? View.VISIBLE : View.GONE}"
             app:coordinates="@{viewModel.cityCoordinates.degrees}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:name="@{viewModel.cityName}"
             app:onCloseClick="@{()-> viewModel.closeDialogClick()}"
-            app:onShowWeatherClick="@{()-> viewModel.showWeatherClick()}" />
+            app:onShowWeatherClick="@{()-> viewModel.showWeatherClick()}"
+            app:visibilityAnimated="@{viewModel.cityDialogVisibility ? View.VISIBLE : View.GONE}" />
 
         <androidx.core.widget.ContentLoadingProgressBar
             android:id="@+id/progress_bar"
