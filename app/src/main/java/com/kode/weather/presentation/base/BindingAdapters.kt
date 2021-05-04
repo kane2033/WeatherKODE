@@ -1,5 +1,6 @@
 package com.kode.weather.presentation.base
 
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +22,7 @@ object BindingAdapters {
             //если есть картинка
             //устанавливаем картинку из url в imageView форматом Bitmap
             Picasso.get().load(url).into(this)
+            Log.d("PICASSO_URL", "Picasso URL: $url")
         }
     }
 

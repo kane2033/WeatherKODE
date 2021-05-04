@@ -21,6 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginTop="24dp"
+            app:weatherImage="@{viewModel.weather.weatherCondition}"
             android:contentDescription="@string/weather_image"
             android:scaleType="centerCrop"
             android:src="@drawable/weather_scattered_clouds"
@@ -59,7 +60,9 @@
             android:id="@+id/weatherIconImageView"
             android:layout_width="84dp"
             android:layout_height="66dp"
+            app:imageUrl="@{viewModel.weather.iconUrl}"
             android:contentDescription="@string/weather_icon"
+            android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/temperatureView"
             tools:src="@drawable/ic_launcher_foreground" />

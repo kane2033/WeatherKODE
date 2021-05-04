@@ -2,7 +2,8 @@ package com.kode.weather.domain.weather.entity
 
 data class Weather(
     val temperature: Int,
-    val icon: String = "",
+    val weatherCondition: WeatherCondition,
+    val iconUrl: String,
     val description: String,
     val humidity: Int,
     val windSpeed: Double,

@@ -30,6 +30,7 @@ android {
             minifyEnabled false
             debuggable true
             buildConfigField "String", "API_URL", "\"https://api.openweathermap.org/data/2.5/\""
+            buildConfigField "String", "ICON_URL", "\"https://openweathermap.org/img/wn/\""
         }
         release {
             minifyEnabled false
