@@ -1,12 +1,17 @@
 package com.kode.weather.presentation.map
 
+import android.content.Context
+import androidx.annotation.DrawableRes
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.model.LatLng
 import com.kode.weather.domain.base.Event
 import com.kode.weather.domain.weather.entity.LocationCoordinates
 import com.kode.weather.domain.weather.usecase.FetchCityNameByCoordinates
 import com.kode.weather.domain.weather.usecase.FetchUserLastLocation
 import com.kode.weather.presentation.base.BaseViewModel
+import com.kode.weather.presentation.map.entity.SingleCircleMarker
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.launch
 
@@ -14,9 +19,6 @@ class MapViewModel(
     private val fetchUserLastLocation: FetchUserLastLocation,
     private val fetchCityName: FetchCityNameByCoordinates
 ) : BaseViewModel() {
-
-    private val _lastLocation = MutableLiveData<Event<LocationCoordinates>>()
-    val lastLocation = _lastLocation.asLiveData()
 
     // Отображаемое название города
     private val _cityName = MutableLiveData<String>()
@@ -30,8 +32,28 @@ class MapViewModel(
     private val _cityCoordinates = MutableLiveData<LocationCoordinates>()
     val cityCoordinates = _cityCoordinates.asLiveData()
 
+    // Т.к. для получение местоположения юзера нужен пермишн,
+    // fetchUserLastLocation вызывается в onViewCreated фрагмента после проверки пермишна,
+    // что происходит каждый раз при возврате из бекстека, вследствие чего возникают баги,
+    // поэтому вьюмодель хранит, было ли запрошено местоположение юзера.
+    private var hasUserLastLocation = false
+
     private val _cityDialogVisibility = MutableLiveData(false)
     val cityDialogVisibility = _cityDialogVisibility.asLiveData()
+
+    // Единичный маркер с радиусом на гугл карте
+    private var mapMarker: SingleCircleMarker? = null
+
+    fun setupMarker(radius: Double, color: Int, @DrawableRes id: Int, context: Context?) {
+        // Создание маркера, только если он еще не создан
+        if (mapMarker == null) {
+            mapMarker = SingleCircleMarker(radius, color).apply { setIcon(id, context) }
+        }
+    }
+
+    fun placeMarker(googleMap: GoogleMap, coordinates: LatLng) {
+        mapMarker?.createCircleMarker(googleMap, coordinates)
+    }
 
     fun setCityCoordinates(latitude: Double, longitude: Double) {
         _cityCoordinates.value = LocationCoordinates(latitude, longitude)
@@ -47,10 +69,15 @@ class MapViewModel(
     }
 
     fun fetchUserLastLocation() {
+        if (hasUserLastLocation) return
+
         viewModelScope.launch {
             val result = fetchUserLastLocation(Unit).loadingIndication().single()
             result.fold(
-                onSuccess = { setCityCoordinates(it.latitude, it.longitude) },
+                onSuccess = {
+                    hasUserLastLocation = true
+                    setCityCoordinates(it.latitude, it.longitude)
+                },
                 onFailure = { handleFailure(it) }
             )
         }

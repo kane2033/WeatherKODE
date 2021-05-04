@@ -15,7 +15,6 @@ import com.kode.weather.databinding.FragmentMapBinding
 import com.kode.weather.domain.weather.exception.LastLocationNotAvailable
 import com.kode.weather.domain.weather.exception.LocationPermissionMissing
 import com.kode.weather.presentation.base.BaseFragment
-import com.kode.weather.presentation.map.entity.SingleCircleMarker
 import com.kode.weather.presentation.map.extention.checkPermission
 import com.kode.weather.presentation.map.extention.permissionActivityResultContract
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -37,8 +36,6 @@ class MapFragment : BaseFragment(R.layout.fragment_map) {
     private fun Fragment.getMapFragment() =
         childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
 
-    // Единичный маркер с радиусом на гугл карте
-    private lateinit var mapMarker: SingleCircleMarker
 
     // Запрос пермишна на локацию через Activity Result API
     private val requestLocationPermission = permissionActivityResultContract(
@@ -62,10 +59,17 @@ class MapFragment : BaseFragment(R.layout.fragment_map) {
             }
         })
 
-        mapMarker = SingleCircleMarker(
+/*        mapMarker = SingleCircleMarker(
             RADIUS_DEFAULT, ContextCompat.getColor(requireContext(), R.color.blue_circle)
         )
-        mapMarker.setIcon(R.drawable.ic_marker, context)
+        mapMarker.setIcon(R.drawable.ic_marker, context)*/
+
+        viewModel.setupMarker(
+            RADIUS_DEFAULT,
+            ContextCompat.getColor(requireContext(), R.color.blue_circle),
+            R.drawable.ic_marker,
+            context
+        )
 
         // Работа с картой будет выполнена только если есть пермишн на локацию
         if (requireContext().checkPermission(LOCATION_PERMISSION)) {
@@ -86,8 +90,8 @@ class MapFragment : BaseFragment(R.layout.fragment_map) {
         viewModel.cityCoordinates.observe(viewLifecycleOwner, {
             mapFragment.getMapAsync { googleMap ->
                 val coordinates = LatLng(it.latitude, it.longitude)
-                mapMarker.createCircleMarker(googleMap, coordinates)
-                // Не увеличиваем зум, если текущий выше дефолтного
+                viewModel.placeMarker(googleMap, coordinates)
+                // Не уменьшаем зум, если текущий выше дефолтного
                 val cameraPosition = if (googleMap.cameraPosition.zoom > ZOOM_DEFAULT) {
                     CameraUpdateFactory.newLatLng(coordinates)
                 } else {
