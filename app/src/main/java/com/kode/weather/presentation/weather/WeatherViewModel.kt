@@ -1,27 +1,29 @@
 package com.kode.weather.presentation.weather
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kode.weather.domain.weather.entity.Weather
 import com.kode.weather.domain.weather.entity.WeatherQuery
 import com.kode.weather.domain.weather.usecase.FetchCityWeather
-import com.kode.weather.presentation.base.BaseViewModel
+import com.kode.weather.presentation.base.viewmodel.BaseViewModel
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.launch
 
 class WeatherViewModel(
-    cityName: String,
-    private val fetchCityWeather: FetchCityWeather
-) : BaseViewModel() {
+    private val cityName: String,
+    private val fetchCityWeather: FetchCityWeather,
+    baseViewModel: BaseViewModel
+) : BaseViewModel by baseViewModel, ViewModel() {
 
     private val _weather = MutableLiveData<Weather>()
     val weather = _weather.asLiveData()
 
     init {
-        fetchCityWeather(cityName)
+        fetchCityWeather()
     }
 
-    private fun fetchCityWeather(cityName: String) {
+    private fun fetchCityWeather() {
         val query = WeatherQuery(cityName)
         viewModelScope.launch {
             val result = fetchCityWeather(query).loadingIndication().single()

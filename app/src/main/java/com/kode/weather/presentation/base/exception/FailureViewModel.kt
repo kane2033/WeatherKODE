@@ -1,16 +1,15 @@
 package com.kode.weather.presentation.base.exception
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.SavedStateHandle
-import com.kode.weather.domain.base.exception.FailureInfo
-import com.kode.weather.presentation.base.BaseViewModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
+import com.kode.weather.domain.base.exception.info.FullScreenFailureInfo
+import com.kode.weather.presentation.base.viewmodel.BaseViewModel
 
-class FailureViewModel constructor(savedStateHandle: SavedStateHandle): BaseViewModel() {
+class FailureViewModel(
+    failureInfo: FullScreenFailureInfo,
+    baseViewModel: BaseViewModel
+) : BaseViewModel by baseViewModel, ViewModel() {
 
-    companion object {
-        const val FAILURE_INFO_KEY = "failure info"
-    }
-
-    val failureInfo: LiveData<FailureInfo> =
-        savedStateHandle.getLiveData(FAILURE_INFO_KEY)
+    val failureInfo: LiveData<FullScreenFailureInfo> = liveData { emit(failureInfo) }
 }

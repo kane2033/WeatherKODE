@@ -14,13 +14,16 @@ import com.google.android.gms.maps.model.*
  * Данный маркер при пересоздании автоматически убирается с карты.
  * Таким образом, на карте может быть только один такой маркер.
  * */
-class SingleCircleMarker(radius: Double, fillColor: Int = Color.BLUE) {
+class SingleCircleMarker(
+    radius: Double,
+    fillColor: Int = Color.BLUE,
+    @DrawableRes iconId: Int,
+    context: Context?
+) {
     private var marker: Marker? = null
     private var circle: Circle? = null
 
-    // Иконку нужно установить позже, чтобы избежать
-    // "BitmapDescriptorFactory is not initialized"
-    private var icon: BitmapDescriptor? = null
+    private val icon: BitmapDescriptor = iconFromVectorDrawable(iconId, context)
 
     private val markerOptions =
         MarkerOptions().flat(true).anchor(0.5f, 0.5f)
@@ -37,10 +40,6 @@ class SingleCircleMarker(radius: Double, fillColor: Int = Color.BLUE) {
 
         marker = googleMap.addMarker(markerOptions.position(coordinates).icon(icon))
         circle = googleMap.addCircle(circleOptions.center(coordinates))
-    }
-
-    fun setIcon(@DrawableRes resId: Int, context: Context?) {
-        icon = iconFromVectorDrawable(resId, context)
     }
 
     // Drawable -> BitmapDescriptor convert

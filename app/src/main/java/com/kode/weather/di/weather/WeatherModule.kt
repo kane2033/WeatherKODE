@@ -1,5 +1,6 @@
 package com.kode.weather.di.weather
 
+import androidx.activity.result.ActivityResultLauncher
 import com.kode.weather.data.weather.datasource.location.GeoCoderDataSourceImpl
 import com.kode.weather.data.weather.datasource.location.LastLocationDataSourceImpl
 import com.kode.weather.data.weather.datasource.network.WeatherDataSourceImpl
@@ -11,6 +12,7 @@ import com.kode.weather.domain.weather.usecase.FetchCityWeather
 import com.kode.weather.domain.weather.usecase.FetchUserLastLocation
 import com.kode.weather.presentation.map.MapViewModel
 import com.kode.weather.presentation.weather.WeatherViewModel
+import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -23,11 +25,13 @@ object WeatherModule {
         single<GeoCoderDataSource> { GeoCoderDataSourceImpl(androidContext()) }
         single { FetchCityNameByCoordinates(get()) }
 
-        viewModel { MapViewModel(get(), get()) }
+        viewModel { (requestPermission: ActivityResultLauncher<String>) ->
+            MapViewModel(requestPermission, get(), get(), androidApplication(), get())
+        }
 
         single<WeatherDataSource> { WeatherDataSourceImpl(get(), get()) }
         single { FetchCityWeather(get()) }
 
-        viewModel { WeatherViewModel(get(), get()) }
+        viewModel { WeatherViewModel(get(), get(), get()) }
     }
 }

@@ -3,11 +3,12 @@ package com.kode.weather.presentation.base.exception
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.kode.weather.R
 import com.kode.weather.databinding.FragmentFailureBinding
-import org.koin.androidx.viewmodel.ext.android.stateViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 /**
  * Диалоговый фрагмент, ответственный за отображение информации об ошибке
@@ -15,7 +16,9 @@ import org.koin.androidx.viewmodel.ext.android.stateViewModel
  * */
 class FailureFragment : DialogFragment(R.layout.fragment_failure) {
 
-    private val viewModel: FailureViewModel by stateViewModel()
+    private val args: FailureFragmentArgs by navArgs()
+
+    private val viewModel: FailureViewModel by viewModel { parametersOf(args.failureInfo) }
 
     private val binding: FragmentFailureBinding by viewBinding(FragmentFailureBinding::bind)
 

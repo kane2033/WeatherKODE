@@ -29,6 +29,13 @@
         android:id="@+id/failureFragment"
         android:name="com.kode.weather.presentation.base.exception.FailureFragment"
         android:label="FailureFragment"
-        tools:layout="@layout/fragment_failure" />
+        tools:layout="@layout/fragment_failure">
+        <argument
+            android:name="failureInfo"
+            app:argType="com.kode.weather.domain.base.exception.info.FullScreenFailureInfo" />
+    </dialog>
+    <action
+        android:id="@+id/action_global_failureFragment"
+        app:destination="@id/failureFragment" />
 
 </navigation>

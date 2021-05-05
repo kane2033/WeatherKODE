@@ -1,9 +1,7 @@
 package com.kode.weather.presentation.map
 
-import android.Manifest
 import android.os.Bundle
 import android.view.View
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -12,36 +10,34 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.kode.weather.R
 import com.kode.weather.databinding.FragmentMapBinding
+import com.kode.weather.domain.base.exception.info.SmallFailureInfo
 import com.kode.weather.domain.weather.exception.LastLocationNotAvailable
 import com.kode.weather.domain.weather.exception.LocationPermissionMissing
 import com.kode.weather.presentation.base.BaseFragment
-import com.kode.weather.presentation.map.extention.checkPermission
 import com.kode.weather.presentation.map.extention.permissionActivityResultContract
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import java.util.*
 
 class MapFragment : BaseFragment(R.layout.fragment_map) {
 
     companion object {
-        private const val LOCATION_PERMISSION = Manifest.permission.ACCESS_COARSE_LOCATION
         private const val ZOOM_DEFAULT = 11F
-        private const val RADIUS_DEFAULT = 2000.0 // 5 КМ
     }
 
-    override val viewModel: MapViewModel by viewModel()
+    // Запрос пермишна на локацию через Activity Result API
+    private val requestLocationPermission = permissionActivityResultContract(
+        onGranted = { viewModel.fetchUserLastLocationWithPermissionCheck() },
+        onRejected = { viewModel.setPermissionFailure() }
+    )
+
+    override val viewModel: MapViewModel by viewModel { parametersOf(requestLocationPermission) }
 
     private val binding: FragmentMapBinding by viewBinding(FragmentMapBinding::bind)
 
     // Получаем из фрагмента контейнера карту-фрагмент
     private fun Fragment.getMapFragment() =
         childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-
-
-    // Запрос пермишна на локацию через Activity Result API
-    private val requestLocationPermission = permissionActivityResultContract(
-        onGranted = { viewModel.fetchUserLastLocation() },
-        onRejected = { makeToast(R.string.error_permission_location) }
-    )
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -51,32 +47,22 @@ class MapFragment : BaseFragment(R.layout.fragment_map) {
             lifecycleOwner = viewLifecycleOwner
         }
 
-        handleFailure({
-            when (it) {
-                is LastLocationNotAvailable -> makeToast(R.string.error_last_location)
-                is LocationPermissionMissing -> makeToast(R.string.error_permission_location)
-                else -> makeToast(R.string.error_base_title)
+        // Обработка ошибок, присущих данному фрагменту
+        handleFailure(handleFailure = { failure ->
+            when (failure) {
+                // Не удалось получить локацию юзера - можно повторить
+                is LastLocationNotAvailable -> SmallFailureInfo(
+                    viewModel::fetchUserLastLocationWithPermissionCheck,
+                    getString(R.string.error_last_location)
+                )
+                // Юзер не дал пермишн на локацию - можно еще раз запросить
+                is LocationPermissionMissing -> SmallFailureInfo(
+                    viewModel::fetchUserLastLocationWithPermissionCheck,
+                    getString(R.string.error_permission_location)
+                )
+                else -> null
             }
         })
-
-/*        mapMarker = SingleCircleMarker(
-            RADIUS_DEFAULT, ContextCompat.getColor(requireContext(), R.color.blue_circle)
-        )
-        mapMarker.setIcon(R.drawable.ic_marker, context)*/
-
-        viewModel.setupMarker(
-            RADIUS_DEFAULT,
-            ContextCompat.getColor(requireContext(), R.color.blue_circle),
-            R.drawable.ic_marker,
-            context
-        )
-
-        // Работа с картой будет выполнена только если есть пермишн на локацию
-        if (requireContext().checkPermission(LOCATION_PERMISSION)) {
-            viewModel.fetchUserLastLocation()
-        } else {
-            requestLocationPermission.launch(LOCATION_PERMISSION)
-        }
 
         val mapFragment = getMapFragment()
 

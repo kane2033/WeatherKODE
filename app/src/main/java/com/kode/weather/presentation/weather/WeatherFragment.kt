@@ -2,10 +2,12 @@ package com.kode.weather.presentation.weather
 
 import android.os.Bundle
 import android.view.View
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.kode.weather.R
 import com.kode.weather.databinding.FragmentWeatherBinding
+import com.kode.weather.domain.base.exception.info.FullScreenFailureInfo
 import com.kode.weather.presentation.base.BaseFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -26,9 +28,17 @@ class WeatherFragment : BaseFragment(R.layout.fragment_weather) {
             lifecycleOwner = viewLifecycleOwner
         }
 
-        handleFailure(handleRequestFailure = { failure ->
-            when (failure.code) {
-                404 -> makeToast(R.string.error_city_not_found)
+        val cityNotFoundFailureInfo = FullScreenFailureInfo(
+            retryClickedCallback = { findNavController().popBackStack(R.id.weatherFragment, true) },
+            title = getString(R.string.error_city_not_found_title),
+            text = getString(R.string.error_city_not_found),
+            buttonText = getString(R.string.error_city_not_found_button)
+        )
+
+        handleFailure(handleRequestFailure = { code ->
+            when (code) {
+                404 -> cityNotFoundFailureInfo
+                else -> null
             }
         })
     }

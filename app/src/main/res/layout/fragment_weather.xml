@@ -24,7 +24,6 @@
             app:weatherImage="@{viewModel.weather.weatherCondition}"
             android:contentDescription="@string/weather_image"
             android:scaleType="centerCrop"
-            android:src="@drawable/weather_scattered_clouds"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
