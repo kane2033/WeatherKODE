@@ -23,7 +23,7 @@ class WeatherViewModel(
         fetchCityWeather()
     }
 
-    private fun fetchCityWeather() {
+    fun fetchCityWeather() {
         val query = WeatherQuery(cityName)
         viewModelScope.launch {
             val result = fetchCityWeather(query).loadingIndication().single()

@@ -35,11 +35,15 @@ class WeatherFragment : BaseFragment(R.layout.fragment_weather) {
             buttonText = getString(R.string.error_city_not_found_button)
         )
 
-        handleFailure(handleRequestFailure = { code ->
-            when (code) {
-                404 -> cityNotFoundFailureInfo
-                else -> null
-            }
-        })
+        handleFailure(
+            // При любой необработанной ошибке пытаемся снова запросить погоду города
+            // (в том числе и при проблемах с интернетом)
+            baseRetryClickedCallback = viewModel::fetchCityWeather,
+            handleRequestFailure = { code ->
+                when (code) {
+                    404 -> cityNotFoundFailureInfo
+                    else -> null
+                }
+            })
     }
 }
