@@ -3,6 +3,7 @@ package com.kode.weather
 import android.app.Application
 import com.kode.weather.di.base.BaseModule
 import com.kode.weather.di.base.NetworkModule
+import com.kode.weather.di.map.MapModule
 import com.kode.weather.di.weather.WeatherModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -18,6 +19,7 @@ class AndroidApplication : Application() {
             modules(
                 BaseModule.module,
                 NetworkModule.module,
+                MapModule.module,
                 WeatherModule.module
             )
         }

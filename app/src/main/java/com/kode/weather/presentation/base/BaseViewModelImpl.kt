@@ -1,4 +1,4 @@
-package com.kode.weather.presentation.base.viewmodel
+package com.kode.weather.presentation.base
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

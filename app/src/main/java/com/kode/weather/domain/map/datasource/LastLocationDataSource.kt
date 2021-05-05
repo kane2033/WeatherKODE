@@ -1,6 +1,6 @@
-package com.kode.weather.domain.weather.datasource
+package com.kode.weather.domain.map.datasource
 
-import com.kode.weather.domain.weather.entity.LocationCoordinates
+import com.kode.weather.domain.map.entity.LocationCoordinates
 
 interface LastLocationDataSource {
     // Система требует доступ к геолокации,

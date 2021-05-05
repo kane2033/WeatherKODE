@@ -16,7 +16,6 @@ import com.kode.weather.domain.base.exception.info.FailureInfo
 import com.kode.weather.domain.base.exception.info.FullScreenFailureInfo
 import com.kode.weather.domain.base.exception.info.SmallFailureInfo
 import com.kode.weather.presentation.base.exception.FailureFragmentDirections
-import com.kode.weather.presentation.base.viewmodel.BaseViewModel
 
 /**
  * Базовый класс [Fragment],

@@ -1,4 +1,4 @@
-package com.kode.weather.domain.weather.exception
+package com.kode.weather.domain.map.exception
 
 import com.kode.weather.domain.base.exception.Failure
 

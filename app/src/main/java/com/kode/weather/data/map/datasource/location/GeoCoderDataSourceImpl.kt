@@ -1,9 +1,9 @@
-package com.kode.weather.data.weather.datasource.location
+package com.kode.weather.data.map.datasource.location
 
 import android.content.Context
 import android.location.Geocoder
-import com.kode.weather.domain.weather.datasource.GeoCoderDataSource
-import com.kode.weather.domain.weather.entity.LocationCoordinates
+import com.kode.weather.domain.map.datasource.GeoCoderDataSource
+import com.kode.weather.domain.map.entity.LocationCoordinates
 import java.util.*
 
 class GeoCoderDataSourceImpl(context: Context) : GeoCoderDataSource {

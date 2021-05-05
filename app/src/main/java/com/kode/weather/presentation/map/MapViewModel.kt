@@ -11,11 +11,11 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
 import com.kode.weather.R
 import com.kode.weather.domain.base.Event
-import com.kode.weather.domain.weather.entity.LocationCoordinates
-import com.kode.weather.domain.weather.exception.LocationPermissionMissing
-import com.kode.weather.domain.weather.usecase.FetchCityNameByCoordinates
-import com.kode.weather.domain.weather.usecase.FetchUserLastLocation
-import com.kode.weather.presentation.base.viewmodel.BaseViewModel
+import com.kode.weather.domain.map.entity.LocationCoordinates
+import com.kode.weather.domain.map.exception.LocationPermissionMissing
+import com.kode.weather.domain.map.usecase.FetchCityNameByCoordinates
+import com.kode.weather.domain.map.usecase.FetchUserLastLocation
+import com.kode.weather.presentation.base.BaseViewModel
 import com.kode.weather.presentation.map.entity.SingleCircleMarker
 import com.kode.weather.presentation.map.extention.checkPermission
 import kotlinx.coroutines.flow.single

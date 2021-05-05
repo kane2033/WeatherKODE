@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.kode.weather.domain.base.exception.info.FullScreenFailureInfo
-import com.kode.weather.presentation.base.viewmodel.BaseViewModel
+import com.kode.weather.presentation.base.BaseViewModel
 
 class FailureViewModel(
     failureInfo: FullScreenFailureInfo,

@@ -1,4 +1,4 @@
-package com.kode.weather.domain.weather.entity
+package com.kode.weather.domain.map.entity
 
 import java.util.*
 import kotlin.math.abs

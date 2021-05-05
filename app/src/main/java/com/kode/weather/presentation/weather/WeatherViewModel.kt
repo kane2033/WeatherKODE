@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.kode.weather.domain.weather.entity.Weather
 import com.kode.weather.domain.weather.entity.WeatherQuery
 import com.kode.weather.domain.weather.usecase.FetchCityWeather
-import com.kode.weather.presentation.base.viewmodel.BaseViewModel
+import com.kode.weather.presentation.base.BaseViewModel
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.launch
 

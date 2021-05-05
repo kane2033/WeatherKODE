@@ -1,10 +1,10 @@
-package com.kode.weather.domain.weather.usecase
+package com.kode.weather.domain.map.usecase
 
 import com.kode.weather.domain.base.usecase.UseCase
-import com.kode.weather.domain.weather.datasource.LastLocationDataSource
-import com.kode.weather.domain.weather.entity.LocationCoordinates
-import com.kode.weather.domain.weather.exception.LastLocationNotAvailable
-import com.kode.weather.domain.weather.exception.LocationPermissionMissing
+import com.kode.weather.domain.map.datasource.LastLocationDataSource
+import com.kode.weather.domain.map.entity.LocationCoordinates
+import com.kode.weather.domain.map.exception.LastLocationNotAvailable
+import com.kode.weather.domain.map.exception.LocationPermissionMissing
 
 class FetchUserLastLocation(private val lastLocationDataSource: LastLocationDataSource) :
     UseCase<LocationCoordinates, Unit>() {

@@ -11,8 +11,8 @@ import com.google.android.gms.maps.model.*
 import com.kode.weather.R
 import com.kode.weather.databinding.FragmentMapBinding
 import com.kode.weather.domain.base.exception.info.SmallFailureInfo
-import com.kode.weather.domain.weather.exception.LastLocationNotAvailable
-import com.kode.weather.domain.weather.exception.LocationPermissionMissing
+import com.kode.weather.domain.map.exception.LastLocationNotAvailable
+import com.kode.weather.domain.map.exception.LocationPermissionMissing
 import com.kode.weather.presentation.base.BaseFragment
 import com.kode.weather.presentation.map.extention.permissionActivityResultContract
 import org.koin.androidx.viewmodel.ext.android.viewModel

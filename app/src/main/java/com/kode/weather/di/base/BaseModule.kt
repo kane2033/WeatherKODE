@@ -1,9 +1,9 @@
 package com.kode.weather.di.base
 
 import com.kode.weather.domain.base.exception.info.FullScreenFailureInfo
+import com.kode.weather.presentation.base.BaseViewModel
+import com.kode.weather.presentation.base.BaseViewModelImpl
 import com.kode.weather.presentation.base.exception.FailureViewModel
-import com.kode.weather.presentation.base.viewmodel.BaseViewModel
-import com.kode.weather.presentation.base.viewmodel.BaseViewModelImpl
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 

@@ -1,11 +1,11 @@
-package com.kode.weather.data.weather.datasource.location
+package com.kode.weather.data.map.datasource.location
 
 import android.content.Context
 import androidx.annotation.RequiresPermission
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.Tasks
-import com.kode.weather.domain.weather.datasource.LastLocationDataSource
-import com.kode.weather.domain.weather.entity.LocationCoordinates
+import com.kode.weather.domain.map.datasource.LastLocationDataSource
+import com.kode.weather.domain.map.entity.LocationCoordinates
 
 class LastLocationDataSourceImpl(context: Context) : LastLocationDataSource {
 
