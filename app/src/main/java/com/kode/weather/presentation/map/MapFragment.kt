@@ -1,6 +1,9 @@
 package com.kode.weather.presentation.map
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -94,5 +97,19 @@ class MapFragment : BaseFragment(R.layout.fragment_map) {
                 findNavController().navigate(action)
             }
         })
+
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_map, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.searchButton) {
+            makeToast(R.string.in_development)
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

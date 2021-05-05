@@ -1,6 +1,9 @@
 package com.kode.weather.presentation.weather
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -45,5 +48,19 @@ class WeatherFragment : BaseFragment(R.layout.fragment_weather) {
                     else -> null
                 }
             })
+
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_weather, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.shareButton) {
+            makeToast(R.string.in_development)
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

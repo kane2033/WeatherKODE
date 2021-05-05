@@ -2,10 +2,12 @@
     <string name="app_name">WeatherKODE</string>
 
     <string name="map_fragment_title">Global weather</string>
+    <string name="search">Search</string>
 
     <string name="show_weather">Show weather</string>
     <string name="close">Close</string>
 
+    <string name="share">Share</string>
     <string name="celsius">&#176;C</string>
     <string name="weather_icon">Weather icon</string>
     <string name="humidity">Humidity</string>
@@ -39,4 +41,6 @@
 
     <string name="retry">Retry</string>
     <string name="refresh">Refresh</string>
+
+    <string name="in_development">Feature is in development</string>
 </resources>
