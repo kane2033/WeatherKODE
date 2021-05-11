@@ -12,6 +12,6 @@ object WeatherModule {
         single<WeatherDataSource> { WeatherDataSourceImpl(get()) }
         single { FetchCityWeather(get()) }
 
-        viewModel { WeatherViewModel(get(), get(), get()) }
+        viewModel { WeatherViewModel(get(), get()) }
     }
 }

@@ -11,15 +11,15 @@ import com.kode.weather.domain.map.exception.LocationPermissionMissing
 import com.kode.weather.domain.map.usecase.FetchCityNameByCoordinates
 import com.kode.weather.domain.map.usecase.FetchUserLastLocation
 import com.kode.weather.presentation.base.BaseViewModel
+import com.kode.weather.presentation.base.BaseViewModelImpl
 import com.kode.weather.presentation.map.entity.SingleCircleMarker
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.launch
 
 class MapViewModel(
     private val fetchUserLastLocation: FetchUserLastLocation,
-    private val fetchCityName: FetchCityNameByCoordinates,
-    baseViewModel: BaseViewModel,
-) : BaseViewModel by baseViewModel, ViewModel() {
+    private val fetchCityName: FetchCityNameByCoordinates
+) : BaseViewModel by BaseViewModelImpl(), ViewModel() {
 
     // Хранит наличие пермишна геолокации,
     // необходимое для получения последней локации юзера

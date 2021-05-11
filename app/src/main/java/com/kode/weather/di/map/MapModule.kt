@@ -19,6 +19,6 @@ object MapModule {
         single<GeoCoderDataSource> { GeoCoderDataSourceImpl(androidContext()) }
         single { FetchCityNameByCoordinates(get()) }
 
-        viewModel { MapViewModel(get(), get(), get()) }
+        viewModel { MapViewModel(get(), get()) }
     }
 }

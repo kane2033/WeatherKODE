@@ -19,6 +19,7 @@ import com.kode.weather.domain.base.exception.info.SmallFailureInfo
 import com.kode.weather.domain.map.exception.LastLocationNotAvailable
 import com.kode.weather.domain.map.exception.LocationPermissionMissing
 import com.kode.weather.presentation.base.BaseFragment
+import com.kode.weather.presentation.base.BaseFragmentImpl
 import com.kode.weather.presentation.map.entity.SingleCircleMarker
 import com.kode.weather.presentation.map.extention.checkPermission
 import com.kode.weather.presentation.map.extention.permissionActivityResultContract
@@ -26,7 +27,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.util.*
 
-class MapFragment : BaseFragment(R.layout.fragment_map) {
+class MapFragment : BaseFragment by BaseFragmentImpl(), Fragment(R.layout.fragment_map) {
 
     companion object {
         private const val LOCATION_PERMISSION = Manifest.permission.ACCESS_COARSE_LOCATION

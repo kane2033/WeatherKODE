@@ -7,14 +7,14 @@ import com.kode.weather.domain.weather.entity.Weather
 import com.kode.weather.domain.weather.entity.WeatherQuery
 import com.kode.weather.domain.weather.usecase.FetchCityWeather
 import com.kode.weather.presentation.base.BaseViewModel
+import com.kode.weather.presentation.base.BaseViewModelImpl
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.launch
 
 class WeatherViewModel(
     private val cityName: String,
     private val fetchCityWeather: FetchCityWeather,
-    baseViewModel: BaseViewModel
-) : BaseViewModel by baseViewModel, ViewModel() {
+) : BaseViewModel by BaseViewModelImpl(), ViewModel() {
 
     private val _weather = MutableLiveData<Weather>()
     val weather = _weather.asLiveData()
