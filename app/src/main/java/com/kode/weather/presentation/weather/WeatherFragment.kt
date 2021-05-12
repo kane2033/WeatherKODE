@@ -13,16 +13,15 @@ import com.kode.weather.R
 import com.kode.weather.databinding.FragmentWeatherBinding
 import com.kode.weather.domain.base.exception.info.FullScreenFailureInfo
 import com.kode.weather.domain.weather.exception.FetchWeatherFailure
-import com.kode.weather.presentation.base.BaseFragment
-import com.kode.weather.presentation.base.BaseFragmentImpl
+import com.kode.weather.presentation.base.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
-class WeatherFragment : BaseFragment by BaseFragmentImpl(), Fragment(R.layout.fragment_weather) {
+class WeatherFragment : Fragment(R.layout.fragment_weather) {
 
     private val args: WeatherFragmentArgs by navArgs()
 
-    override val viewModel: WeatherViewModel by viewModel { parametersOf(args.cityName) }
+    private val viewModel: WeatherViewModel by viewModel { parametersOf(args.cityName) }
 
     private val binding: FragmentWeatherBinding by viewBinding(FragmentWeatherBinding::bind)
 
@@ -41,17 +40,18 @@ class WeatherFragment : BaseFragment by BaseFragmentImpl(), Fragment(R.layout.fr
             buttonText = getString(R.string.error_city_not_found_button)
         )
 
-        handleFailure(
-            // При любой необработанной ошибке пытаемся снова запросить погоду города
-            // (в том числе и при проблемах с интернетом)
-            baseRetryClickedCallback = viewModel::fetchCityWeather,
-            handleFailure = { failure ->
-                when (failure) {
-                    is FetchWeatherFailure.NotFound -> cityNotFoundFailureInfo
-                    else -> null
+        viewModel.failure.observeEvent(viewLifecycleOwner, {
+            handleFailure(
+                failure = it,
+                baseRetryClickedCallback = viewModel::fetchCityWeather,
+                handleFailure = { failure ->
+                    when (failure) {
+                        is FetchWeatherFailure.NotFound -> cityNotFoundFailureInfo
+                        else -> null
+                    }
                 }
-            }
-        )
+            )
+        })
 
         setHasOptionsMenu(true)
     }
