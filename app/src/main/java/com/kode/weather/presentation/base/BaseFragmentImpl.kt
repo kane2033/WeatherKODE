@@ -76,16 +76,10 @@ class BaseFragmentImpl : BaseFragment, Fragment() {
      * Для обработки доп. ошибок через данный параметр, необходимо создать функцию, в которой вернуть
      * объект [FailureInfo], содержащий сообщение ошибки и коллбек, производимый при получении
      * такой ошибки и нажатии кнопки "повторить/обновить".
-     *
-     * @param handleRequestFailure - обработка HTTP ошибок по коду HTTP.
-     * Стандартный параметр - никак не обрабатывается.
-     * Для обработки доп. http ошибок необходимо создать функцию, возвращающую [FailureInfo]
-     * в зависимости от переданного в параметры [Failure.RequestFailure.code]
      * */
     override fun handleFailure(
         baseRetryClickedCallback: () -> Unit,
-        handleFailure: (failure: Failure) -> FailureInfo?,
-        handleRequestFailure: (code: Int) -> FailureInfo?
+        handleFailure: (failure: Failure) -> FailureInfo?
     ) {
         // Наблюдаем за изменением переменной ошибки
         viewModel.failure.observe(viewLifecycleOwner, {
@@ -94,7 +88,6 @@ class BaseFragmentImpl : BaseFragment, Fragment() {
                 // Получаем FailureInfo - текст ошибки и коллбек при обновлении
                 val failureInfo: FailureInfo? = when (failure) {
                     is Failure.NetworkConnection -> getNetworkFailureInfo(baseRetryClickedCallback)
-                    is Failure.RequestFailure -> handleRequestFailure(failure.code)
                     else -> handleFailure(failure)
                 }
 

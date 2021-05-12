@@ -44,7 +44,6 @@ interface BaseFragment {
 
     fun handleFailure(
         baseRetryClickedCallback: () -> Unit = {},
-        handleFailure: (failure: Failure) -> FailureInfo? = { null },
-        handleRequestFailure: (code: Int) -> FailureInfo? = { null }
+        handleFailure: (failure: Failure) -> FailureInfo? = { null }
     )
 }

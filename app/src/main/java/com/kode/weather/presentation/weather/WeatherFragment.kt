@@ -12,6 +12,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.kode.weather.R
 import com.kode.weather.databinding.FragmentWeatherBinding
 import com.kode.weather.domain.base.exception.info.FullScreenFailureInfo
+import com.kode.weather.domain.weather.exception.FetchWeatherFailure
 import com.kode.weather.presentation.base.BaseFragment
 import com.kode.weather.presentation.base.BaseFragmentImpl
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -44,12 +45,13 @@ class WeatherFragment : BaseFragment by BaseFragmentImpl(), Fragment(R.layout.fr
             // При любой необработанной ошибке пытаемся снова запросить погоду города
             // (в том числе и при проблемах с интернетом)
             baseRetryClickedCallback = viewModel::fetchCityWeather,
-            handleRequestFailure = { code ->
-                when (code) {
-                    404 -> cityNotFoundFailureInfo
+            handleFailure = { failure ->
+                when (failure) {
+                    is FetchWeatherFailure.NotFound -> cityNotFoundFailureInfo
                     else -> null
                 }
-            })
+            }
+        )
 
         setHasOptionsMenu(true)
     }
