@@ -11,6 +11,8 @@ import androidx.navigation.fragment.navArgs
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.kode.weather.R
 import com.kode.weather.databinding.FragmentWeatherBinding
+import com.kode.weather.domain.base.exception.Failure
+import com.kode.weather.domain.base.exception.info.FailureInfo
 import com.kode.weather.domain.base.exception.info.FullScreenFailureInfo
 import com.kode.weather.domain.weather.exception.FetchWeatherFailure
 import com.kode.weather.presentation.base.*
@@ -40,17 +42,21 @@ class WeatherFragment : Fragment(R.layout.fragment_weather) {
             buttonText = getString(R.string.error_city_not_found_button)
         )
 
-        viewModel.failure.observeEvent(viewLifecycleOwner, {
-            handleFailure(
-                failure = it,
-                baseRetryClickedCallback = viewModel::fetchCityWeather,
-                handleFailure = { failure ->
-                    when (failure) {
-                        is FetchWeatherFailure.NotFound -> cityNotFoundFailureInfo
-                        else -> null
-                    }
-                }
-            )
+        val handleWeatherFailures: (failure: Failure) -> FailureInfo? = { failure ->
+            when (failure) {
+                is FetchWeatherFailure.NotFound -> cityNotFoundFailureInfo
+                else -> null
+            }
+        }
+
+        viewModel.uiState.observeEvent(viewLifecycleOwner, {
+            if (it is UiState.Failure) {
+                handleFailure(
+                    failure = it.failure,
+                    baseRetryClickedCallback = viewModel::fetchCityWeather,
+                    handleFailure = handleWeatherFailures
+                )
+            }
         })
 
         setHasOptionsMenu(true)

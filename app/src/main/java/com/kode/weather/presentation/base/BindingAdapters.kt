@@ -10,6 +10,7 @@ import androidx.databinding.BindingAdapter
 import androidx.transition.Slide
 import androidx.transition.Transition
 import androidx.transition.TransitionManager
+import com.kode.weather.domain.base.Event
 import com.squareup.picasso.Picasso
 
 
@@ -28,8 +29,8 @@ object BindingAdapters {
 
     @JvmStatic
     @BindingAdapter(value = ["loading"])
-    fun ContentLoadingProgressBar.setLoading(isLoading: Boolean) {
-        if (isLoading) this.show() else this.hide()
+    fun ContentLoadingProgressBar.setLoading(uiState: Event<UiState>?) {
+        if (uiState?.peekContent() is UiState.Loading) this.show() else this.hide()
     }
 
     @JvmStatic

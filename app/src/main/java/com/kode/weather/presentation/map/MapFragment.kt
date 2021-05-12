@@ -15,6 +15,8 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.kode.weather.R
 import com.kode.weather.databinding.FragmentMapBinding
+import com.kode.weather.domain.base.exception.Failure
+import com.kode.weather.domain.base.exception.info.FailureInfo
 import com.kode.weather.domain.base.exception.info.SmallFailureInfo
 import com.kode.weather.domain.map.exception.LastLocationNotAvailable
 import com.kode.weather.domain.map.exception.LocationPermissionMissing
@@ -56,23 +58,26 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             lifecycleOwner = viewLifecycleOwner
         }
 
-        // Обработка ошибок, присущих данному фрагменту
-        viewModel.failure.observeEvent(viewLifecycleOwner, {
-            handleFailure(failure = it, handleFailure = { failure ->
-                when (failure) {
-                    // Не удалось получить локацию юзера - можно повторить
-                    is LastLocationNotAvailable -> SmallFailureInfo(
-                        { viewModel.fetchUserLastLocation() },
-                        getString(R.string.error_last_location)
-                    )
-                    // Юзер не дал пермишн на локацию - можно еще раз запросить
-                    is LocationPermissionMissing -> SmallFailureInfo(
-                        { requestLocationPermission.launch(LOCATION_PERMISSION) },
-                        getString(R.string.error_permission_location)
-                    )
-                    else -> null
-                }
-            })
+        val handleMapFailures: (failure: Failure) -> FailureInfo? = { failure ->
+            when (failure) {
+                // Не удалось получить локацию юзера - можно повторить
+                is LastLocationNotAvailable -> SmallFailureInfo(
+                    { viewModel.fetchUserLastLocation() },
+                    getString(R.string.error_last_location)
+                )
+                // Юзер не дал пермишн на локацию - можно еще раз запросить
+                is LocationPermissionMissing -> SmallFailureInfo(
+                    { requestLocationPermission.launch(LOCATION_PERMISSION) },
+                    getString(R.string.error_permission_location)
+                )
+                else -> null
+            }
+        }
+
+        viewModel.uiState.observeEvent(viewLifecycleOwner, {
+            if (it is UiState.Failure) {
+                handleFailure(failure = it.failure, handleFailure = handleMapFailures)
+            }
         })
 
         // Единичный маркер на карте

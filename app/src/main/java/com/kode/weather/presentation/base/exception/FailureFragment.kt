@@ -25,7 +25,7 @@ class FailureFragment : DialogFragment(R.layout.fragment_failure) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Отображаем диалог в фуллскрине
-        setStyle(STYLE_NORMAL, R.style.Theme_AppCompat_DayNight_DialogWhenLarge)
+        setStyle(STYLE_NO_TITLE, R.style.Theme_AppCompat_Light_DialogWhenLarge)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

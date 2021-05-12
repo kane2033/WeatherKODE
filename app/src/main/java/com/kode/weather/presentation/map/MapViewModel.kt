@@ -10,8 +10,10 @@ import com.kode.weather.domain.map.entity.LocationCoordinates
 import com.kode.weather.domain.map.exception.LocationPermissionMissing
 import com.kode.weather.domain.map.usecase.FetchCityNameByCoordinates
 import com.kode.weather.domain.map.usecase.FetchUserLastLocation
-import com.kode.weather.presentation.base.BaseViewModel
-import com.kode.weather.presentation.base.BaseViewModelImpl
+import com.kode.weather.presentation.base.UiState
+import com.kode.weather.presentation.base.asLiveData
+import com.kode.weather.presentation.base.handleFailure
+import com.kode.weather.presentation.base.loadingIndication
 import com.kode.weather.presentation.map.entity.SingleCircleMarker
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.launch
@@ -19,7 +21,10 @@ import kotlinx.coroutines.launch
 class MapViewModel(
     private val fetchUserLastLocation: FetchUserLastLocation,
     private val fetchCityName: FetchCityNameByCoordinates
-) : BaseViewModel by BaseViewModelImpl(), ViewModel() {
+) : ViewModel() {
+
+    private val _uiState = MutableLiveData<Event<UiState>>()
+    val uiState = _uiState.asLiveData()
 
     // Хранит наличие пермишна геолокации,
     // необходимое для получения последней локации юзера
@@ -79,7 +84,7 @@ class MapViewModel(
 
     // Даем знать, что пермишн локации не получен
     fun setPermissionFailure() {
-        handleFailure(LocationPermissionMissing)
+        LocationPermissionMissing.handleFailure(_uiState)
     }
 
     fun fetchUserLastLocation() {
@@ -87,10 +92,10 @@ class MapViewModel(
         if (hasLocationPermission.value?.peekContent() == false) return
 
         viewModelScope.launch {
-            val result = fetchUserLastLocation(Unit).loadingIndication().single()
+            val result = fetchUserLastLocation(Unit).loadingIndication(_uiState).single()
             result.fold(
                 onSuccess = { setCityCoordinates(it.latitude, it.longitude) },
-                onFailure = { handleFailure(it) }
+                onFailure = { it.handleFailure(_uiState) }
             )
         }
     }
@@ -98,7 +103,7 @@ class MapViewModel(
     private fun fetchCityNameByCoordinates(latitude: Double, longitude: Double) {
         viewModelScope.launch {
             val cityCoordinates = LocationCoordinates(latitude, longitude)
-            val result = fetchCityName(cityCoordinates).loadingIndication().single()
+            val result = fetchCityName(cityCoordinates).loadingIndication(_uiState).single()
             result.fold(
                 onSuccess = {
                     _cityName.value = it

@@ -7,6 +7,6 @@ import org.koin.dsl.module
 
 object BaseModule {
     val module = module {
-        viewModel { (failureInfo: FullScreenFailureInfo) -> FailureViewModel(failureInfo, get()) }
+        viewModel { (failureInfo: FullScreenFailureInfo) -> FailureViewModel(failureInfo) }
     }
 }
