@@ -8,7 +8,7 @@ import okhttp3.Response
  * [Interceptor], добавляющий API токен сервиса OpenWeatherMapAPI
  * в каждый запрос
  * */
-class OpenWeatherAuthInterceptor() : Interceptor {
+class OpenWeatherAuthInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
         val url = request.url.newBuilder()

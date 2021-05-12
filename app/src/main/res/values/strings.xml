@@ -30,11 +30,6 @@
     <string name="error_base">The problem is on our side, we are already looking into it.
         Please try refreshing the screen later.</string>
 
-    <string name="error_missing_content_title">Content is missing</string>
-    <string name="error_missing_content">The requested content is missing. Please try again later.</string>
-
-    <string name="permission_location_needed">App requires location permission.</string>
-    <string name="permission_location_granted">Location permission granted.</string>
     <string name="error_permission_location">Permission is not granted</string>
 
     <string name="error_last_location">Could not get last location</string>

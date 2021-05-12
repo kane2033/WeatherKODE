@@ -9,5 +9,4 @@ data class Weather(
     val windSpeed: Double,
     val windDirection: WindDirection,
     val pressure: Int
-) {
-}
+)

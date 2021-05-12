@@ -1,12 +1,8 @@
 package com.kode.weather.presentation.base
 
-import android.os.Bundle
 import android.widget.Toast
-import androidx.annotation.IdRes
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavOptions
-import androidx.navigation.Navigator
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.kode.weather.R
@@ -49,15 +45,6 @@ class BaseFragmentImpl : BaseFragment, Fragment() {
         val snackBar = Snackbar.make(view, message, Snackbar.LENGTH_SHORT)
         action?.let { snackBar.setAction(actionText) { it() } }
         snackBar.show()
-    }
-
-    override fun navigateTo(
-        @IdRes action: Int,
-        args: Bundle?,
-        navOptions: NavOptions?,
-        extras: Navigator.Extras?
-    ) {
-        findNavController().navigate(action, args, navOptions, extras)
     }
 
     /**
