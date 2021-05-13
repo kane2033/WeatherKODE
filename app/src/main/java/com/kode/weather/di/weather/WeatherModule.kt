@@ -9,9 +9,9 @@ import org.koin.dsl.module
 
 object WeatherModule {
     val module = module {
-        single<WeatherDataSource> { WeatherDataSourceImpl(get(), get()) }
+        single<WeatherDataSource> { WeatherDataSourceImpl(get()) }
         single { FetchCityWeather(get()) }
 
-        viewModel { WeatherViewModel(get(), get(), get()) }
+        viewModel { WeatherViewModel(get(), get()) }
     }
 }

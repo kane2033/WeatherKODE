@@ -2,5 +2,6 @@ package com.kode.weather.domain.weather.exception
 
 import com.kode.weather.domain.base.exception.Failure
 
-object FetchWeatherFailure : Failure.FeatureFailure() {
+sealed class FetchWeatherFailure : Failure.FeatureFailure() {
+    object NotFound : FetchWeatherFailure()
 }

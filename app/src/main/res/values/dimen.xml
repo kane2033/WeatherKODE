@@ -2,6 +2,5 @@
 <resources>
     <dimen name="def_margin">16dp</dimen>
     <dimen name="item_text_margin">8dp</dimen>
-    <dimen name="round_corner_radius">8dp</dimen>
     <dimen name="weather_text_size">18sp</dimen>
 </resources>

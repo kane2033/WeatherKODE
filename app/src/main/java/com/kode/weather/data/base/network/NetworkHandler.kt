@@ -18,13 +18,10 @@ class NetworkHandler(context: Context) {
             val activeNetwork =
                 connectivityManager.getNetworkCapabilities(network) ?: return false
 
-            return when {
-                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
-                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH) -> true
-                else -> false
-            }
+            return activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) or
+                    activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) or
+                    activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) or
+                    activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH)
         } else {
             @Suppress("DEPRECATION")
             val networkInfo = connectivityManager.activeNetworkInfo ?: return false
