@@ -15,12 +15,11 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.kode.weather.R
 import com.kode.weather.databinding.FragmentMapBinding
-import com.kode.weather.domain.base.exception.Failure
-import com.kode.weather.domain.base.exception.info.FailureInfo
 import com.kode.weather.domain.base.exception.info.SmallFailureInfo
 import com.kode.weather.domain.map.exception.LastLocationNotAvailable
 import com.kode.weather.domain.map.exception.LocationPermissionMissing
 import com.kode.weather.presentation.base.*
+import com.kode.weather.presentation.base.exception.RetryClickedInterface
 import com.kode.weather.presentation.map.entity.SingleCircleMarker
 import com.kode.weather.presentation.map.extention.checkPermission
 import com.kode.weather.presentation.map.extention.permissionActivityResultContract
@@ -28,7 +27,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.util.*
 
-class MapFragment : Fragment(R.layout.fragment_map) {
+class MapFragment : Fragment(R.layout.fragment_map), RetryClickedInterface {
 
     companion object {
         private const val LOCATION_PERMISSION = Manifest.permission.ACCESS_COARSE_LOCATION
@@ -57,28 +56,6 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             viewModel = this@MapFragment.viewModel
             lifecycleOwner = viewLifecycleOwner
         }
-
-        val handleMapFailures: (failure: Failure) -> FailureInfo? = { failure ->
-            when (failure) {
-                // Не удалось получить локацию юзера - можно повторить
-                is LastLocationNotAvailable -> SmallFailureInfo(
-                    { viewModel.fetchUserLastLocation() },
-                    getString(R.string.error_last_location)
-                )
-                // Юзер не дал пермишн на локацию - можно еще раз запросить
-                is LocationPermissionMissing -> SmallFailureInfo(
-                    { requestLocationPermission.launch(LOCATION_PERMISSION) },
-                    getString(R.string.error_permission_location)
-                )
-                else -> null
-            }
-        }
-
-        viewModel.uiState.observeEvent(viewLifecycleOwner, {
-            if (it is UiState.Failure) {
-                handleFailure(failure = it.failure, handleFailure = handleMapFailures)
-            }
-        })
 
         // Единичный маркер на карте
         viewModel.initMarker(
@@ -142,6 +119,35 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         })
 
         setHasOptionsMenu(true)
+
+        viewModel.uiState.observeEvent(viewLifecycleOwner, {
+            if (it is UiState.Failure) {
+                openFailureView(failure = it.failure, getFailureInfo = { failure ->
+                    when (failure) {
+                        is LastLocationNotAvailable -> SmallFailureInfo(
+                            ::onRetryClicked,
+                            getString(R.string.error_last_location)
+                        )
+                        is LocationPermissionMissing -> SmallFailureInfo(
+                            ::onRetryClicked,
+                            getString(R.string.error_permission_location)
+                        )
+                        else -> null
+                    }
+                })
+            }
+        })
+    }
+
+    // Действие при нажатии кнопки "retry/refresh" у окна, отображающего ошибку
+    override fun onRetryClicked() {
+        val failureState = viewModel.uiState.value?.peekContent() as? UiState.Failure
+        when (failureState?.failure) {
+            is LastLocationNotAvailable -> viewModel.fetchUserLastLocation()
+            is LocationPermissionMissing -> requestLocationPermission.launch(LOCATION_PERMISSION)
+            else -> {
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

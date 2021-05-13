@@ -1,5 +1,6 @@
 package com.kode.weather.presentation.base.exception
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.DialogFragment
@@ -16,11 +17,23 @@ import org.koin.core.parameter.parametersOf
  * */
 class FailureFragment : DialogFragment(R.layout.fragment_failure) {
 
+    private var clickedListener: RetryClickedInterface? = null
+
     private val args: FailureFragmentArgs by navArgs()
 
     private val viewModel: FailureViewModel by viewModel { parametersOf(args.failureInfo) }
 
     private val binding: FragmentFailureBinding by viewBinding(FragmentFailureBinding::bind)
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        try {
+            clickedListener =
+                parentFragmentManager.primaryNavigationFragment as RetryClickedInterface
+        } catch (e: ClassCastException) {
+            throw ClassCastException("Calling fragment must implement Callback interface")
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,8 +49,14 @@ class FailureFragment : DialogFragment(R.layout.fragment_failure) {
             lifecycleOwner = viewLifecycleOwner
         }
         binding.retryButton.setOnClickListener {
-            viewModel.failureInfo.value?.retryClickedCallback?.invoke()
+            //viewModel.failureInfo.value?.retryClickedCallback?.invoke()
+            clickedListener?.onRetryClicked()
             dismissAllowingStateLoss()
         }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        clickedListener = null
     }
 }

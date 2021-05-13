@@ -68,30 +68,26 @@ fun <T> LiveData<Event<T>>.observeEvent(
  * В зависимости от возвращенного типа ([FullScreenFailureInfo] или [SmallFailureInfo])
  * открывается соответствующее окно, отображающее ошибку (полноэкранный диалог или снекбар соотв.)
  *
- * @param baseRetryClickedCallback - коллбэк, выполняемый при нажатии кнопки "повторить/обновить".
- * По стандарту ничего не делает.
- *
- * @param handleFailure - дополнительная обработка ошибок, присущая определенному экрану.
- * Стандартный параметр - отображение базового сообщения ошибки.
+ * @param getFailureInfo - функция, которая должна
+ * вернуть соответсвующий [FailureInfo] указанному [Failure].
  * Для обработки доп. ошибок через данный параметр, необходимо создать функцию, в которой вернуть
  * объект [FailureInfo], содержащий сообщение ошибки и коллбек, производимый при получении
  * такой ошибки и нажатии кнопки "повторить/обновить".
  * */
-fun Fragment.handleFailure(
+fun Fragment.openFailureView(
     failure: Failure,
-    baseRetryClickedCallback: () -> Unit = {},
-    handleFailure: (failure: Failure) -> FailureInfo? = { null }
+    getFailureInfo: (failure: Failure) -> FailureInfo? = { null }
 ) {
     // Получаем FailureInfo - текст ошибки и коллбек при обновлении
     val failureInfo: FailureInfo? = when (failure) {
-        is Failure.NetworkConnection -> getNetworkFailureInfo(baseRetryClickedCallback)
-        else -> handleFailure(failure)
+        is Failure.NetworkConnection -> getNetworkFailureInfo()
+        else -> getFailureInfo(failure)
     }
 
     // Открытие окна с ошибкой
     when (failureInfo) {
         // Если инфа об ошибке не указана (null), показываем базовую в полном экране
-        null -> openFailureDialog(getBaseFailureInfo(baseRetryClickedCallback))
+        null -> openFailureDialog(getBaseFailureInfo())
         // Открываем полноэкранный диалог
         is FullScreenFailureInfo -> openFailureDialog(failureInfo)
         // Открываем снекбар
@@ -100,16 +96,14 @@ fun Fragment.handleFailure(
 }
 
 // Текст ошибки при проблемах с интернет-соединением
-private fun Fragment.getNetworkFailureInfo(retryClicked: () -> Unit) = FullScreenFailureInfo(
-    retryClicked,
+private fun Fragment.getNetworkFailureInfo() = FullScreenFailureInfo(
     getString(R.string.error_network_connection_title),
     getString(R.string.error_network_connection)
 )
 
 // Базовый текст ошибки, если параметр handleFailure не указан
-private fun Fragment.getBaseFailureInfo(baseRetryClickedCallback: () -> Unit) =
+private fun Fragment.getBaseFailureInfo() =
     FullScreenFailureInfo(
-        baseRetryClickedCallback,
         getString(R.string.error_base_title),
         getString(R.string.error_base)
     )

@@ -11,15 +11,14 @@ import androidx.navigation.fragment.navArgs
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.kode.weather.R
 import com.kode.weather.databinding.FragmentWeatherBinding
-import com.kode.weather.domain.base.exception.Failure
-import com.kode.weather.domain.base.exception.info.FailureInfo
 import com.kode.weather.domain.base.exception.info.FullScreenFailureInfo
 import com.kode.weather.domain.weather.exception.FetchWeatherFailure
 import com.kode.weather.presentation.base.*
+import com.kode.weather.presentation.base.exception.RetryClickedInterface
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
-class WeatherFragment : Fragment(R.layout.fragment_weather) {
+class WeatherFragment : Fragment(R.layout.fragment_weather), RetryClickedInterface {
 
     private val args: WeatherFragmentArgs by navArgs()
 
@@ -35,31 +34,32 @@ class WeatherFragment : Fragment(R.layout.fragment_weather) {
             lifecycleOwner = viewLifecycleOwner
         }
 
-        val cityNotFoundFailureInfo = FullScreenFailureInfo(
-            retryClickedCallback = { findNavController().popBackStack(R.id.weatherFragment, true) },
-            title = getString(R.string.error_city_not_found_title),
-            text = getString(R.string.error_city_not_found),
-            buttonText = getString(R.string.error_city_not_found_button)
-        )
-
-        val handleWeatherFailures: (failure: Failure) -> FailureInfo? = { failure ->
-            when (failure) {
-                is FetchWeatherFailure.NotFound -> cityNotFoundFailureInfo
-                else -> null
-            }
-        }
-
         viewModel.uiState.observeEvent(viewLifecycleOwner, {
             if (it is UiState.Failure) {
-                handleFailure(
-                    failure = it.failure,
-                    baseRetryClickedCallback = viewModel::fetchCityWeather,
-                    handleFailure = handleWeatherFailures
-                )
+                openFailureView(failure = it.failure, getFailureInfo = { failure ->
+                    when (failure) {
+                        is FetchWeatherFailure.NotFound -> FullScreenFailureInfo(
+                            title = getString(R.string.error_city_not_found_title),
+                            text = getString(R.string.error_city_not_found),
+                            buttonText = getString(R.string.error_city_not_found_button)
+                        )
+                        else -> null
+                    }
+                })
             }
         })
 
         setHasOptionsMenu(true)
+    }
+
+    override fun onRetryClicked() {
+        val failureState = viewModel.uiState.value?.peekContent() as? UiState.Failure
+        when (failureState?.failure) {
+            is FetchWeatherFailure.NotFound -> {
+                findNavController().popBackStack(R.id.weatherFragment, true)
+            }
+            else -> viewModel.fetchCityWeather()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
