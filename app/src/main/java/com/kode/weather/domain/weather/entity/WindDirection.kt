@@ -1,7 +1,5 @@
 package com.kode.weather.domain.weather.entity
 
-import com.kode.weather.domain.base.exception.Failure
-
 enum class WindDirection(val direction: String, private val degree: Int) {
     EAST("E", 90),
     NORTH_EAST("NE", 45),
@@ -20,18 +18,7 @@ enum class WindDirection(val direction: String, private val degree: Int) {
             return values().find {
                 val directionRange = it.degree - delta..it.degree + delta
                 degree in directionRange
-            } ?: isNorth(degree)
+            } ?: NORTH // Дефолтное значение
         }
-
-        // Костыль, потому что имеет дело с градусами,
-        // а в текущей реализации цикл выше пропустит промежуток от 315 + delta .. 360
-        private fun isNorth(degree: Int) =
-            if (degree in NORTH_WEST.degree + delta..NORTH.degree) {
-                NORTH
-            } else {
-                throw IncorrectWindDirection
-            }
     }
-
-    object IncorrectWindDirection : Failure.FeatureFailure()
 }
