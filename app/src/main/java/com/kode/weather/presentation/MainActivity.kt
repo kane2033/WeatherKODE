@@ -1,13 +1,14 @@
-package com.kode.weather
+package com.kode.weather.presentation
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.kode.weather.R
 import com.kode.weather.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {

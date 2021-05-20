@@ -3,7 +3,6 @@ package com.kode.weather.di.base
 import com.kode.weather.BuildConfig
 import com.kode.weather.data.base.network.NetworkAvailabilityInterceptor
 import com.kode.weather.data.base.network.NetworkHandler
-import com.kode.weather.data.weather.datasource.network.interceptor.OpenWeatherAuthInterceptor
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.OkHttpClient
@@ -16,22 +15,20 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 object NetworkModule {
     val module = module {
         single { NetworkHandler(androidContext()) }
-
         single { NetworkAvailabilityInterceptor(get()) }
-        single { OpenWeatherAuthInterceptor() }
-        single { provideOkHttpClient(get(), get()) }
-        single { provideRetrofit(get(), provideMoshi()) }
+
+        single { provideOkHttpClient(get()) }
+        single { provideRetrofit(get()) }
     }
 
-    private fun provideRetrofit(client: OkHttpClient, moshi: Moshi): Retrofit = Retrofit.Builder()
+    fun provideRetrofit(client: OkHttpClient): Retrofit = Retrofit.Builder()
         .client(client)
         .baseUrl(BuildConfig.API_URL)
-        .addConverterFactory(MoshiConverterFactory.create(moshi)) // Парсинг JSON
+        .addConverterFactory(MoshiConverterFactory.create(provideMoshi())) // Парсинг JSON
         .build()
 
-    private fun provideOkHttpClient(
-        networkAvailabilityInterceptor: NetworkAvailabilityInterceptor,
-        openWeatherAuthInterceptor: OpenWeatherAuthInterceptor
+    fun provideOkHttpClient(
+        networkAvailabilityInterceptor: NetworkAvailabilityInterceptor
     ): OkHttpClient {
         val okHttpClientBuilder: OkHttpClient.Builder = OkHttpClient.Builder()
 
@@ -44,8 +41,6 @@ object NetworkModule {
 
         // Проверка сети при каждом запросе
         okHttpClientBuilder.addInterceptor(networkAvailabilityInterceptor)
-        // Добавление токена в каждый запрос
-        okHttpClientBuilder.addInterceptor(openWeatherAuthInterceptor)
 
         return okHttpClientBuilder.build()
     }
