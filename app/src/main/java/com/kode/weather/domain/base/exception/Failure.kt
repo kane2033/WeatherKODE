@@ -6,12 +6,18 @@ package com.kode.weather.domain.base.exception
  * Каждая ошибка, специфичная для для функции, должна наследовать [FeatureFailure].
  */
 sealed class Failure: Throwable() {
-    object NetworkConnection : Failure()
-    object MissingContentFailure : Failure()
-
     open class FeatureFailure : Failure()
 
-    open class RequestFailure(val code: Int, override val message: String? = null) : Failure() {
+    object MissingContentFailure : Failure()
+
+    // Общие сетевые ошибки
+    open class NetworkFailure : Failure()
+    object NoInternet : NetworkFailure()
+    object ServerFailure : NetworkFailure()
+    object Timeout : NetworkFailure()
+
+    open class RequestFailure(val code: Int, override val message: String? = null) :
+        NetworkFailure() {
         override fun equals(other: Any?) = other is RequestFailure && other.code == this.code
         override fun hashCode() = code
     }

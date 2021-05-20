@@ -22,9 +22,17 @@
     <string name="error_city_not_found">Forecast in this city is not available.</string>
     <string name="error_city_not_found_button">Go back</string>
 
-    <string name="error_network_connection_title">No internet</string>
-    <string name="error_network_connection">Try refreshing the screen when
-        communication is restored.</string>
+    <string name="error_no_internet_title">No internet</string>
+    <string name="error_no_internet">It appears that your device does not have 
+        network connection at the moment. Please check your network connection and try again.</string>
+
+    <string name="error_server_title">Unknown server error</string>
+    <string name="error_server">There is something with a server. 
+        Try refreshing the screen later.</string>
+
+    <string name="error_timeout_title">Server timeout</string>
+    <string name="error_timeout">@string/error_server</string>
+
 
     <string name="error_base_title">Something went wrong</string>
     <string name="error_base">The problem is on our side, we are already looking into it.

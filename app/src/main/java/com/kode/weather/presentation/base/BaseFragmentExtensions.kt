@@ -61,13 +61,14 @@ fun <T> LiveData<Event<T>>.observeEvent(
 }
 
 /**
- * Стандартный метод обработки ошибок, который дефолтно обрабатывает ошибку
- * отсутствия соединения [Failure.NetworkConnection] и, если не обработаны остальные ошибки,
- * отображает стандартное сообщение ошибки.
+ * Функция открывает окно ошибки в зависимости от переданного параметра [failure].
+ * По стандарту, обрабатывает все [Failure.NetworkFailure] и, если переданный параметр [failure]
+ * не обработан, отображает стандартное сообщение ошибки.
  *
  * В зависимости от возвращенного типа ([FullScreenFailureInfo] или [SmallFailureInfo])
  * открывается соответствующее окно, отображающее ошибку (полноэкранный диалог или снекбар соотв.)
  *
+ * @param failure - ошибка, на основне которой открывается соответствующее окно ошибки.
  * @param getFailureInfo - функция, которая должна
  * вернуть соответсвующий [FailureInfo] указанному [Failure].
  * Для обработки доп. ошибок через данный параметр, необходимо создать функцию, в которой вернуть
@@ -80,33 +81,23 @@ fun Fragment.openFailureView(
 ) {
     // Получаем FailureInfo - текст ошибки и коллбек при обновлении
     val failureInfo: FailureInfo? = when (failure) {
-        is Failure.NetworkConnection -> getNetworkFailureInfo()
+        is Failure.NetworkFailure -> handleNetworkFailure(failure)
         else -> getFailureInfo(failure)
     }
 
     // Открытие окна с ошибкой
     when (failureInfo) {
-        // Если инфа об ошибке не указана (null), показываем базовую в полном экране
-        null -> openFailureDialog(getBaseFailureInfo())
         // Открываем полноэкранный диалог
         is FullScreenFailureInfo -> openFailureDialog(failureInfo)
         // Открываем снекбар
         is SmallFailureInfo -> openFailureSnackBar(failureInfo)
+        // Если инфа об ошибке не указана (null), показываем базовую в полном экране
+        null -> FullScreenFailureInfo(
+            getString(R.string.error_base_title),
+            getString(R.string.error_base)
+        )
     }
 }
-
-// Текст ошибки при проблемах с интернет-соединением
-private fun Fragment.getNetworkFailureInfo() = FullScreenFailureInfo(
-    getString(R.string.error_network_connection_title),
-    getString(R.string.error_network_connection)
-)
-
-// Базовый текст ошибки, если параметр handleFailure не указан
-private fun Fragment.getBaseFailureInfo() =
-    FullScreenFailureInfo(
-        getString(R.string.error_base_title),
-        getString(R.string.error_base)
-    )
 
 // Открытие полноэкранного диалогового фрагмента с ошибкой
 private fun Fragment.openFailureDialog(failureInfo: FullScreenFailureInfo) {
@@ -122,4 +113,22 @@ private fun Fragment.openFailureSnackBar(failureInfo: SmallFailureInfo) {
         failureInfo.buttonText ?: getString(R.string.retry),
         failureInfo.retryClickedCallback
     )
+}
+
+private fun Fragment.handleNetworkFailure(networkFailure: Failure.NetworkFailure): FailureInfo? {
+    return when (networkFailure) {
+        is Failure.NoInternet -> FullScreenFailureInfo(
+            getString(R.string.error_no_internet_title),
+            getString(R.string.error_no_internet)
+        )
+        is Failure.ServerFailure -> FullScreenFailureInfo(
+            getString(R.string.error_server_title),
+            getString(R.string.error_server)
+        )
+        is Failure.Timeout -> FullScreenFailureInfo(
+            getString(R.string.error_timeout_title),
+            getString(R.string.error_timeout)
+        )
+        else -> null
+    }
 }
